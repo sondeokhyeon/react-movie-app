@@ -1,9 +1,5 @@
 const App = () => {
-  return (
-    <form>
-      <input type="text" placeholder="search" />
-    </form>
-  );
+  return <div>hello world</div>;
 };
 
 export default App;
