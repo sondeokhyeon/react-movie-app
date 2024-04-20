@@ -1,7 +1,12 @@
 import { StarRating } from "./StarRating";
 
-export const MovieCard = ({ movie, genreList }) => {
-  console.log(movie);
+export const MovieCard = ({
+  movie,
+  genreList,
+}: {
+  movie: any;
+  genreList: any;
+}) => {
   return (
     <article key={movie.id} className="">
       <img
