@@ -9,6 +9,7 @@ import { apis, queryKeys } from "utils/apis";
 import { LANGUAGE, ORDER } from "@/types/common";
 import {
   HP_LANGUAGE_PARAMETER_FILTER,
+  HP_MULTI_LANG_HANDLER,
   HP_ORDER_PARAMETER_FILTER,
 } from "utils/helper";
 import useGetMovieGenre from "@/hooks/useGetMovieGenre";
@@ -46,7 +47,7 @@ function Index() {
       <IndexNavigation lang={lang} order={order} />
       <div className="container-fluid">
         <div className="my-4">
-          <h1>{lang === LANGUAGE.ko ? "현재 상영중" : "Now Playing"} </h1>
+          <h1>{HP_MULTI_LANG_HANDLER(lang, "현재 상영중", "Now Playing")}</h1>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1">
           {data?.pages?.map((movies: any) =>
