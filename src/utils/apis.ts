@@ -13,10 +13,16 @@ export const apis = {
   nowPlaying: (args: any) => {
     const p = {
       language: args.lang,
-      order: args.order,
+      sort_by: args.order,
       page: args.pageParam,
     };
     return get("movie/now_playing", p);
+  },
+  genreList: (args: any) => {
+    const p = {
+      language: args.lang,
+    };
+    return get("genre/movie/list", p);
   },
 };
 
@@ -26,7 +32,7 @@ export const queryKeys = {
 
 const get = async (url: string, params: any) => {
   return await instance
-    .get(url, { params: { ...params } })
+    .get(url, { params })
     .then((r) => {
       return r.data;
     })
