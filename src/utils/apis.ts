@@ -11,14 +11,11 @@ const instance = axios.create({
 
 export const apis = {
   nowPlaying: (args: any) => {
-    const { queryKey } = args;
-    const payload = queryKey[1];
-
     const p = {
-      language: payload.lang,
-      order: payload.order,
+      language: args.lang,
+      order: args.order,
+      page: args.pageParam,
     };
-
     return get("movie/now_playing", p);
   },
 };

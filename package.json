@@ -19,6 +19,7 @@
     "jsdom": "^24.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-intersection-observer": "^9.8.2",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
