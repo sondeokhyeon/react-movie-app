@@ -5,23 +5,34 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { E_LANGUAGE, E_ORDER } from "types/common";
 import { apis, queryKeys } from "utils/apis";
+import { LANGUAGE, ORDER } from "@/types/common";
+import {
+  HP_LANGUAGE_PARAMETER_FILTER,
+  HP_ORDER_PARAMETER_FILTER,
+} from "utils/helper";
+import useGetMovieGenre from "@/hooks/useGetMovieGenre";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
 function Index() {
-  const [lang] = useState<E_LANGUAGE>(E_LANGUAGE.ko);
-  const [order] = useState<E_ORDER>(E_ORDER.desc);
+  const router = Route.useSearch<{
+    lang: keyof typeof LANGUAGE;
+    order: keyof typeof ORDER;
+  }>();
+  const [lang] = useState(HP_LANGUAGE_PARAMETER_FILTER(router?.lang));
+  const [order] = useState(HP_ORDER_PARAMETER_FILTER(router?.order));
   const { ref, inView } = useInView();
+  const genreList = useGetMovieGenre(lang);
 
   const { data, isLoading, fetchNextPage } = useInfiniteQuery({
     queryKey: [queryKeys.nowPlaying],
     queryFn: ({ pageParam = 0 }) => apis.nowPlaying({ lang, order, pageParam }),
-    initialPageParam: 1,
-    getNextPageParam: (last) => last.page + 1,
+    initialPageParam: order === "desc" ? 1 : 174,
+    getNextPageParam: (last) =>
+      order === "desc" ? last.page + 1 : last.page - 1,
   });
 
   useEffect(() => {
@@ -32,15 +43,15 @@ function Index() {
 
   return (
     <>
-      <IndexNavigation />
+      <IndexNavigation lang={lang} order={order} />
       <div className="container-fluid">
         <div className="my-4">
-          <h1>현재 상영중</h1>
+          <h1>{lang === LANGUAGE.ko ? "현재 상영중" : "Now Playing"} </h1>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 grid-cols-1">
           {data?.pages?.map((movies: any) =>
             movies?.results?.map((m: any) => (
-              <MovieCard key={m.id} movie={m} />
+              <MovieCard key={m.id} movie={m} genreList={genreList} />
             )),
           )}
         </div>
